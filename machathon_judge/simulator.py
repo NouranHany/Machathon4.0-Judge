@@ -113,3 +113,11 @@ class Simulator:
         rear_wheel_velocity = (bl_wheel_velocity + br_wheel_velocity) / 2
         linear_velocity = rear_wheel_velocity * 0.09
         return current_steering, linear_velocity
+    
+    def is_collision(self, checkpoint_id: int):
+        car_handle = self.sim.getObject('/Manta')
+        print('/ckpt'+str(checkpoint_id))
+        ckpt_handle = self.sim.getObject('/ckpt'+str(checkpoint_id))
+        is_collide, _ = self.sim.checkCollision(car_handle, ckpt_handle)
+        return True if is_collide else False
+        
