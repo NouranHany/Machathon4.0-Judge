@@ -97,6 +97,8 @@ class Simulator:
             Image from the camera
         """
         image, _ = self.sim.getVisionSensorImg(self.camera_handle)
+        if(isinstance(image, str)):
+            image = bytes(image, 'ascii')
         image = np.frombuffer(image, dtype=np.uint8)
         image = image.reshape((self.camera_resolution[1], self.camera_resolution[0], 3))
         image = np.flip(

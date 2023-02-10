@@ -2,3 +2,4 @@ pyzmq
 cbor
 numpy
 requests
+keyboard

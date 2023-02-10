@@ -1,7 +1,8 @@
 import time
+import random
 import requests
 from .simulator import Simulator
-import random
+
 from .data import Data
 
 TEAM_CODE = 101010
@@ -81,8 +82,7 @@ class Judge:
         simulator.reset_car_pose(self.track_starting_position, self.track_starting_orientation)
 
         # execute the competitor's code on the first track
-        lap_time1 = self.run_track(simulator)
-        
+        lap_time1 = self.run_track(simulator) 
         # re-position the car to start the track with the opposite direction
         self.track_starting_orientation = self.data.BTRACK_STARTING_ORIENTATION if track_id == self.data.FORWARD_TRACK else self.data.FTRACK_STARTING_ORIENTATION
         self.track_starting_position = self.data.BTRACK_STARTING_POSITION if track_id == self.data.FORWARD_TRACK else self.data.FTRACK_STARTING_POSITION

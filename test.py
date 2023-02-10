@@ -1,6 +1,7 @@
 from PIL import Image
-from machathon_judge import Simulator, Judge
 import cv2
+from machathon_judge import Simulator, Judge
+
 import keyboard
 import time
 import matplotlib.pyplot as plt
@@ -9,7 +10,7 @@ count = 0
 start = None
 
 
-def run_car(simulator):
+def run_car(simulator: Simulator):
     global count, start
     if start is None:
         start = time.monotonic()
@@ -36,7 +37,7 @@ def run_car(simulator):
     elif keyboard.is_pressed("s"):
         throttle = -1
 
-    simulator.move_car(throttle * 40, steering * simulator.max_steer_angle / 1.7)
+    simulator.move_car(throttle * 15, steering * simulator.max_steer_angle / 1.7)
 
 
 if __name__ == "__main__":
