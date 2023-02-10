@@ -43,4 +43,4 @@ def run_car(simulator: Simulator):
 if __name__ == "__main__":
     cv2.namedWindow("image", cv2.WINDOW_NORMAL)
     judge = Judge(run_car)
-    judge.run()
+    judge.run(send_score=True)

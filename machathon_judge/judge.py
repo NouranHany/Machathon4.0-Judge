@@ -35,7 +35,7 @@ class Judge:
         #     'forward_laptime': str(forward_laptime),
         #     'backward_laptime': str(backward_laptime)
         # }
-        
+
         data = {
             'code': TEAM_CODE,
             'score': str(forward_laptime) + '_' + str(backward_laptime)
@@ -54,6 +54,21 @@ class Judge:
                 print("Something went wrong while sending your score... \nPlease check your internet connection or contact the technical organizers.")
 
     def run_track(self, simulator: Simulator) -> float:
+        """
+        This function runs the competitor's code and calculates the lap time taken to complete a single lap of the track.
+        A lap is considered completed when the vehicle crosses the starting checkpoint twice.
+
+        Parameters:
+        ----------
+        simulator: Simulator
+            The simulation environment object. 
+            Refer to the rule book to see which functions you're allowed to use on this object.
+
+        Returns:
+        -------
+        float
+            The lap time taken to complete a single lap of the track in seconds.
+        """
         next_ckpt_id = 0
         tic = time.monotonic()
         start_time = 0
@@ -75,14 +90,26 @@ class Judge:
         # return the time taken to complete 1 lap through the track
         return finish_time-start_time
 
-    def run(self, send_score: bool, verbose: bool) -> None:
+    def run(self, send_score: bool=True, verbose: bool=True) -> None:
+        """
+        This function calls the competitor's code twice. It then caluclates the laptime taken for each run
+        and, if specified, publishes the laptime to the leaderboard.
+
+        Parameters
+        ----------
+        send_score : bool, optional
+            Determine whether send the score to the leaderboard, default is True.
+        verbose: bool, optional
+            Flag to print messages about the lap time values, default is True.
+        """
         simulator = Simulator()
 
         simulator.start()
         
-        # Randomly choosing which orientation of the track to start the submission with
-        # Your code should run autonomously given any track. 
-        # This is why the process of choosing the starting orientation of the track is done randomly, so you don't control flow your code on a specific track.
+        # Randomly choosing which direction of the track to start the navigation with
+        # Your code should run autonomously given any track
+        # This is why the process of choosing the starting direction of the track is done randomly,
+        # so you don't control flow your code on a specific track.
         track_id = random.randint(0,1)
         self.track_starting_orientation = self.data.FTRACK_STARTING_ORIENTATION if track_id == self.data.FORWARD_TRACK else self.data.BTRACK_STARTING_ORIENTATION
         self.track_starting_position = self.data.FTRACK_STARTING_POSITION if track_id == self.data.FORWARD_TRACK else self.data.BTRACK_STARTING_POSITION            
@@ -90,17 +117,17 @@ class Judge:
         # position the car at the start of the track
         simulator.reset_car_pose(self.track_starting_position, self.track_starting_orientation)
 
-        # execute the competitor's code on the first track
-        lap_time1 = self.run_track(simulator) 
+        # execute the competitor's code on the track first direction
+        lap_time1 = self.run_track(simulator)
         # re-position the car to start the track with the opposite direction
         self.track_starting_orientation = self.data.BTRACK_STARTING_ORIENTATION if track_id == self.data.FORWARD_TRACK else self.data.FTRACK_STARTING_ORIENTATION
         self.track_starting_position = self.data.BTRACK_STARTING_POSITION if track_id == self.data.FORWARD_TRACK else self.data.FTRACK_STARTING_POSITION
         simulator.reset_car_pose(self.track_starting_position, self.track_starting_orientation)
 
-        # execute the competitor's code on the second track
+        # execute the competitor's code on the track's opposite direction
         lap_time2 = self.run_track(simulator)
 
-        # publish the score of the 2 runs to the leaderboard
+        # publish the laptime of the 2 runs to the leaderboard
         forward_laptime, backward_laptime = (lap_time1, lap_time2) if track_id == self.data.FORWARD_TRACK else (lap_time2, lap_time1)
         
         if verbose:
