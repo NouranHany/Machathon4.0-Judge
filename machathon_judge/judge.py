@@ -6,6 +6,7 @@ from .simulator import Simulator
 from .data import Data
 
 TEAM_CODE = 101010
+TEAM_NAME = 'TEAMX'
 
 class Judge:
     def __init__(self, hook_img):
@@ -27,10 +28,19 @@ class Judge:
             Flag to print messages about the submission status. default True.
         """
         
+        # data = {
+        #     'team_7digit_code': TEAM_CODE,
+        #     'solution_code': None,
+        #     'team_name': TEAM_NAME,
+        #     'forward_laptime': str(forward_laptime),
+        #     'backward_laptime': str(backward_laptime)
+        # }
+        
         data = {
             'code': TEAM_CODE,
             'score': str(forward_laptime) + '_' + str(backward_laptime)
         }
+
         headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; rv:55.0) Gecko/20100101 Firefox/55.0'}
 
         # sending post request to STP's leaderboard
@@ -65,7 +75,7 @@ class Judge:
         # return the time taken to complete 1 lap through the track
         return finish_time-start_time
 
-    def run(self) -> None:
+    def run(self, send_score: bool, verbose: bool) -> None:
         simulator = Simulator()
 
         simulator.start()
@@ -74,7 +84,6 @@ class Judge:
         # Your code should run autonomously given any track. 
         # This is why the process of choosing the starting orientation of the track is done randomly, so you don't control flow your code on a specific track.
         track_id = random.randint(0,1)
-        print('Starting with track id:', track_id)
         self.track_starting_orientation = self.data.FTRACK_STARTING_ORIENTATION if track_id == self.data.FORWARD_TRACK else self.data.BTRACK_STARTING_ORIENTATION
         self.track_starting_position = self.data.FTRACK_STARTING_POSITION if track_id == self.data.FORWARD_TRACK else self.data.BTRACK_STARTING_POSITION            
         
@@ -92,8 +101,14 @@ class Judge:
         lap_time2 = self.run_track(simulator)
 
         # publish the score of the 2 runs to the leaderboard
-        forward_laptime, backward_laptime = lap_time1, lap_time2 if track_id == self.data.FORWARD_TRACK else lap_time2, lap_time1
-        self.publish_score(forward_laptime, backward_laptime)
+        forward_laptime, backward_laptime = (lap_time1, lap_time2) if track_id == self.data.FORWARD_TRACK else (lap_time2, lap_time1)
+        
+        if verbose:
+            print("Time taken to finish the track starting from its forward orientation: ", forward_laptime)
+            print("Time taken to finish the track starting from its backward orientation: ", backward_laptime)
+        
+        if send_score:
+            self.publish_score(forward_laptime, backward_laptime, verbose)
     
         simulator.stop()
 
