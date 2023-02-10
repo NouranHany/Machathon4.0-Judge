@@ -2,6 +2,7 @@
 Simulator class as an interface to the Coppelia remote API
 """
 from typing import Tuple
+import threading
 
 import numpy as np
 from .zmqRemoteApi import RemoteAPIClient
@@ -29,7 +30,7 @@ class Simulator:
         ]
 
         # Car parameters
-        self.max_velocity = 15
+        self.max_velocity = 40
         self.max_steer_angle = 0.52  # 30 degrees
         self.motor_torque = 60
 
@@ -46,6 +47,7 @@ class Simulator:
         """
         self.sim.startSimulation()
         self.client.setStepping(False)
+        self.sim.setJointTargetForce(self.motor_handle, self.motor_torque)
 
     def stop(self) -> None:
         """
@@ -65,14 +67,13 @@ class Simulator:
             Steering angle of the car in radians
         """
         steering = np.clip(steering, -self.max_steer_angle, self.max_steer_angle)
-
-        self.sim.setJointTargetPosition(self.steer_handle, steering)
         self.steer_angle = steering
 
         self.motor_velocity = velocity
         if self.motor_velocity > self.max_velocity:
             self.motor_velocity = self.max_velocity
-        self.sim.setJointTargetForce(self.motor_handle, self.motor_torque)
+
+        self.sim.setJointTargetPosition(self.steer_handle, steering)
         self.sim.setJointTargetVelocity(self.motor_handle, self.motor_velocity)
 
     def get_image(self) -> np.ndarray:
@@ -84,7 +85,7 @@ class Simulator:
             Image from the camera
         """
         image, _ = self.sim.getVisionSensorImg(self.camera_handle)
-        image = np.array(list(image), dtype=np.uint8)
+        image = np.frombuffer(image, dtype=np.uint8)
         image = image.reshape((self.camera_resolution[1], self.camera_resolution[0], 3))
         image = np.flip(
             image, 1
