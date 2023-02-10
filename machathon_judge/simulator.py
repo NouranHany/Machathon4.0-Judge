@@ -1,7 +1,7 @@
 """
 Simulator class as an interface to the Coppelia remote API
 """
-from typing import Tuple
+from typing import Tuple, List
 
 import numpy as np
 from .zmqRemoteApi import RemoteAPIClient
@@ -19,6 +19,7 @@ class Simulator:
         self.sim = self.client.getObject("sim")
 
         # Fetch ids for each of the wheels
+        self.car_handle = self.sim.getObject("/Manta")
         self.steer_handle = self.sim.getObject("/Manta/steer_joint")
         self.motor_handle = self.sim.getObject("/Manta/motor_joint")
         self.wheel_handles = [
@@ -75,6 +76,19 @@ class Simulator:
         self.sim.setJointTargetForce(self.motor_handle, self.motor_torque)
         self.sim.setJointTargetVelocity(self.motor_handle, self.motor_velocity)
 
+    def stop_car(self) -> None:
+        """
+        Reset the car's velocity and steering
+        """
+        steering = 0
+
+        self.sim.setJointTargetPosition(self.steer_handle, steering)
+        self.steer_angle = steering
+
+        self.motor_velocity = 0
+        self.sim.setJointTargetForce(self.motor_handle, self.motor_torque)
+        self.sim.setJointTargetVelocity(self.motor_handle, self.motor_velocity)
+
     def get_image(self) -> np.ndarray:
         """
         Get the image from the camera
@@ -115,9 +129,31 @@ class Simulator:
         return current_steering, linear_velocity
     
     def is_collision(self, checkpoint_id: int):
-        car_handle = self.sim.getObject('/Manta')
-        print('/ckpt'+str(checkpoint_id))
+        """
+        Detects the collision of the vehicle with a specified checkpoint in the track
+        Parameters
+        ----------
+        checkpoint_id : int
+            Id of the checkpoint to detect collision with
+        Returns
+        -------
+        boolean
+            whether collision occurs or not        
+        """
         ckpt_handle = self.sim.getObject('/ckpt'+str(checkpoint_id))
-        is_collide, _ = self.sim.checkCollision(car_handle, ckpt_handle)
+        is_collide, _ = self.sim.checkCollision(self.car_handle, ckpt_handle)
         return True if is_collide else False
+        
+    def reset_car_pose(self, position: List[float], orientation: List[float]):
+        """
+        Place the car in a specific position and orientation in the world.
+        Parameters
+        ----------
+        position : list
+            The X, Y, Z location to place the car at
+        orientation : list
+            The euler angles; alpha, beta, gamma to orient the car with
+        """
+        self.sim.setObjectPosition(self.car_handle, self.sim.handle_world, position)
+        self.sim.setObjectOrientation(self.car_handle, self.sim.handle_world, orientation)
         
