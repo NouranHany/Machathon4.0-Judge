@@ -120,6 +120,8 @@ class Judge:
             # Calling the competitior's code
             self.hook(simulator)
 
+        collision_manager.close()
+
         # return the time taken to complete 1 lap through the track
         return finish_time - start_time
 
