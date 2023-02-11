@@ -23,7 +23,7 @@ For more information about the competition regulations, please refer to the offi
 ## Installation
 
 Clone the repositry with the following command <br>
-```git clone github link```
+```git clone https://github.com/NouranHany/Machathon4.0-Judge.git```
 
 Navigate to the repositry directory <br> ```cd Machathon4.0-judge```
 
