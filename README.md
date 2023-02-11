@@ -47,5 +47,5 @@ Install all dependencies needed <br>
 </p>
 This code was developed and maintained by Step Towards Progress STP, a non-profit organization focuses on developing youth in various fields personally and technically through academic programs, projects, and events. You can find more information about STP at https://stp-org.com/ 
 
-If you have any questions or would like to get in touch with our team, please email us at stp23.official@gmail.com or find us on [Facebook](https://www.facebook.com/STP.Organization). 
+<br>If you have any questions or would like to get in touch with our team, please email us at stp23.official@gmail.com or find us on [Facebook](https://www.facebook.com/STP.Organization). 
 
