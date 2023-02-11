@@ -4,18 +4,13 @@ publish the scores to the leaderboard
 """
 import time
 import random
-from typing import Callable
+from typing import Callable, List
 
 # pylint: disable=import-error
 import requests
-
 from .data import Data
 from .simulator import Simulator
 from .collision_manager import CollisionManager
-
-
-TEAM_CODE = 101010
-TEAM_NAME = "TEAMX"
 
 
 class Judge:
@@ -24,16 +19,35 @@ class Judge:
 
     Parameters
     ----------
-    hook_func: Callable
-        A function to be called each time step of the simulation
-        This is the function provided by the competitors to control the vehicle
+    team_name: string
+        Compeitior team name
+    team_code: int
+        The 7-digit team code
+    code_file_paths: List
+        List of the paths to the code files that represent your solution. e.g. ['test.py']
     """
 
-    def __init__(self, hook_func: Callable):
-        self.hook = hook_func
+    def __init__(self, team_name: str, team_code: int, code_file_paths: List):
         self.data = Data()
+        self.team_name = team_name
+        self.team_code = team_code
+        self.code_file_paths = code_file_paths
         self.track_starting_position = None
         self.track_starting_orientation = None
+        self.simulator = None
+        self.collision_manager = None
+        self.hook = None
+
+    def set_run_hook(self, hook_func: Callable) -> None:
+        """
+        Set a hook function.
+        Parameters
+        ----------
+        hook_func: Callable
+            A function to be called each time step of the simulation
+            This is the function provided by the competitors to control the vehicle
+        """
+        self.hook = hook_func
 
     def publish_score(
         self, forward_laptime: float, backward_laptime: float, verbose: bool = True
@@ -51,17 +65,16 @@ class Judge:
             Flag to print messages about the submission status.
         """
 
-        # data = {
-        #     'team_7digit_code': TEAM_CODE,
-        #     'solution_code': None,
-        #     'team_name': TEAM_NAME,
-        #     'forward_laptime': str(forward_laptime),
-        #     'backward_laptime': str(backward_laptime)
-        # }
+        files = [
+            ("solution_code", open(file_path, "rb"))
+            for file_path in self.code_file_paths
+        ]
 
         data = {
-            "code": TEAM_CODE,
-            "score": str(forward_laptime) + "_" + str(backward_laptime),
+            "team_7digit_code": self.team_code,
+            "team_name": self.team_name,
+            "forward_laptime": forward_laptime,
+            "backward_laptime": backward_laptime,
         }
 
         headers = {
@@ -71,7 +84,11 @@ class Judge:
 
         # sending post request to STP's leaderboard
         response = requests.post(
-            url=self.data.LEADERBOARD_ENDPOINT, data=data, headers=headers
+            url=self.data.LEADERBOARD_ENDPOINT,
+            files=files,
+            data=data,
+            headers=headers,
+            timeout=10,
         )
 
         # extracting response status code
@@ -105,11 +122,11 @@ class Judge:
         tic = time.monotonic()
         start_time = 0
 
-        collision_manager = CollisionManager()
+        self.collision_manager = CollisionManager()
 
         while (time.monotonic() - tic) < self.data.TIMEOUT_DURATION:
             # calculate the start and finish time when the vehicle crosses the starting checkpoint
-            if collision_manager.ckpts_collided[next_ckpt_id]:
+            if self.collision_manager.ckpts_collided[next_ckpt_id]:
                 if start_time == 0:
                     start_time = time.monotonic()
                 elif next_ckpt_id == 0:
@@ -120,12 +137,12 @@ class Judge:
             # Calling the competitior's code
             self.hook(simulator)
 
-        collision_manager.close()
+        self.collision_manager.close()
 
         # return the time taken to complete 1 lap through the track
         return finish_time - start_time
 
-    def run(self, send_score: bool = True, verbose: bool = True) -> None:
+    def run_unsafe(self, send_score: bool = True, verbose: bool = True) -> None:
         """
         This function calls the competitor's code twice. It then caluclates the laptime taken
         for each run and, if specified, publishes the laptime to the leaderboard.
@@ -137,7 +154,7 @@ class Judge:
         verbose: bool, optional
             Flag to print messages about the lap time values, default is True.
         """
-        simulator = Simulator()
+        self.simulator = Simulator()
 
         simulator.stop()
         time.sleep(0.5)  # Ensure the simulator has stopped
@@ -165,7 +182,7 @@ class Judge:
         )
 
         # execute the competitor's code on the track first direction
-        lap_time1 = self.run_track(simulator)
+        lap_time1 = self.run_track(self.simulator)
         # re-position the car to start the track with the opposite direction
         self.track_starting_orientation = (
             self.data.BTRACK_STARTING_ORIENTATION
@@ -182,7 +199,7 @@ class Judge:
         )
 
         # execute the competitor's code on the track's opposite direction
-        lap_time2 = self.run_track(simulator)
+        lap_time2 = self.run_track(self.simulator)
 
         # publish the laptime of the 2 runs to the leaderboard
         forward_laptime, backward_laptime = (
@@ -204,4 +221,26 @@ class Judge:
         if send_score:
             self.publish_score(forward_laptime, backward_laptime, verbose)
 
-        simulator.stop()
+        self.simulator.stop()
+
+    def run(self, send_score: bool = True, verbose: bool = True) -> None:
+        """
+        This function is a wrapper for the run_unsafe function
+
+        Parameters
+        ----------
+        send_score : bool, optional
+            Determine whether send the score to the leaderboard, default is True.
+        verbose: bool, optional
+            Flag to print messages about the lap time values, default is True.
+        """
+        try:
+            self.run_unsafe(send_score, verbose)
+        except KeyboardInterrupt:
+            print("Interrupted")
+
+            if self.collision_manager is not None:
+                self.collision_manager.close()
+
+            if self.simulator is not None:
+                self.simulator.stop()
