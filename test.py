@@ -48,7 +48,7 @@ if __name__ == "__main__":
     # Initialize any variables needed
     cv2.namedWindow("image", cv2.WINDOW_NORMAL)
 
-    # You should modify the value of the parameters to the judge constructor 
+    # You should modify the value of the parameters to the judge constructor
     # according to your team's info
     judge = Judge(team_name="TeamX", team_code=12345, code_file_paths=['test.py'])
 
