@@ -88,18 +88,6 @@ class Simulator:
             self.steer_angle = steering
             self.sim.setJointTargetPosition(self.steer_handle, steering)
 
-    def stop_car(self) -> None:
-        """
-        Reset the car's velocity and steering
-        """
-        steering = 0
-
-        self.sim.setJointTargetPosition(self.steer_handle, steering)
-        self.steer_angle = steering
-
-        self.motor_velocity = 0
-        self.sim.setJointTargetVelocity(self.motor_handle, self.motor_velocity)
-
     def get_image(self) -> np.ndarray:
         """
         Get the image from the camera

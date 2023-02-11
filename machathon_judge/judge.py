@@ -7,8 +7,8 @@ import random
 from typing import Callable
 
 # pylint: disable=import-error
+import glob
 import requests
-
 from .data import Data
 from .simulator import Simulator
 from .collision_manager import CollisionManager
@@ -16,7 +16,7 @@ from .collision_manager import CollisionManager
 
 TEAM_CODE = 101010
 TEAM_NAME = "TEAMX"
-
+code_file_paths = ['test.py']
 
 class Judge:
     """
@@ -51,17 +51,13 @@ class Judge:
             Flag to print messages about the submission status.
         """
 
-        # data = {
-        #     'team_7digit_code': TEAM_CODE,
-        #     'solution_code': None,
-        #     'team_name': TEAM_NAME,
-        #     'forward_laptime': str(forward_laptime),
-        #     'backward_laptime': str(backward_laptime)
-        # }
-
+        files = [('solution_code', open(file_path, 'rb')) for file_path in code_file_paths]
+        
         data = {
-            "code": TEAM_CODE,
-            "score": str(forward_laptime) + "_" + str(backward_laptime),
+            'team_7digit_code': TEAM_CODE,
+            'team_name': TEAM_NAME,
+            'forward_laptime': forward_laptime,
+            'backward_laptime': backward_laptime
         }
 
         headers = {
@@ -71,7 +67,8 @@ class Judge:
 
         # sending post request to STP's leaderboard
         response = requests.post(
-            url=self.data.LEADERBOARD_ENDPOINT, data=data, headers=headers
+            url=self.data.LEADERBOARD_ENDPOINT, files=files, data=data, headers=headers,
+            timeout=10
         )
 
         # extracting response status code
@@ -194,7 +191,7 @@ class Judge:
                 "Time taken to finish the track starting from its backward orientation: ",
                 backward_laptime,
             )
-
+            
         if send_score:
             self.publish_score(forward_laptime, backward_laptime, verbose)
 
