@@ -1,6 +1,13 @@
 # Machathon4.0-Judge
-<img alt="Python" src="https://img.shields.io/badge/Code-Python-blue?logo=python"/>
-<img alt="Python" src="https://img.shields.io/badge/Simulator-CoppeliaSim-red"/>
+
+<p align="left">
+  <a style="text-decoration:none" >
+    <img src="https://img.shields.io/badge/Code-Python-blue?logo=python" alt="Website" />
+  </a>
+  <a style="text-decoration:none" >
+    <img src="https://img.shields.io/badge/Simulator-CoppeliaSim-red" alt="Website" />
+  </a>
+</p>
 
 <p align="left">
   <img src="https://user-images.githubusercontent.com/59095993/218258760-82d70b5c-56d2-4820-8644-4d5a1fb68a6b.jpg" width=400 alt="Machathon header">
