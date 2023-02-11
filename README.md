@@ -33,8 +33,7 @@ Install all dependencies needed <br>
 ## How to use the judge
 The test.py given demonstrates how to use the judge class
 
-Create an object of the judge class
-Pass your team information; your team name, team code, paths to file code <br>
+Create an object of the judge class, pass to it your team information; your team name, team code, paths to file code <br>
 ```python
 judge = Judge(team_name="TeamX", team_code=12345, code_file_paths=['test.py'])
 ```
