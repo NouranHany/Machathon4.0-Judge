@@ -103,7 +103,7 @@ class WebSocketManager:
         """
         Closes the web socket connection by joining the thread
         """
-        self.thread.join()
+        self.thread._stop()  # pylint: disable=protected-access
 
 
 class CollisionManager:
@@ -158,4 +158,7 @@ class CollisionManager:
         Closes the web socket connections by joining the threads
         """
         for manager in self.ckpt_managers:
-            manager.close()
+            try:
+                manager.close()
+            except:  # pylint: disable=bare-except
+                pass
