@@ -4,3 +4,4 @@ numpy
 requests
 keyboard
 opencv-python
+websockets
