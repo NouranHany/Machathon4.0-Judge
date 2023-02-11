@@ -50,7 +50,7 @@ if __name__ == "__main__":
 
     # You should modify the value of the parameters to the judge constructor
     # according to your team's info
-    judge = Judge(team_name="TeamX", team_code=12345, code_file_paths=['test.py'])
+    judge = Judge(team_name="Noran", team_code=654321, code_file_paths=['test.py'])
 
     # Pass your main solution function to the judge
     judge.set_run_hook(run_car)
