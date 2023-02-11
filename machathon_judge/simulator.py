@@ -29,6 +29,8 @@ class Simulator:
             self.sim.getObject("/Manta/fl_brake_joint"),
         ]
 
+        self.checkpoints = [self.sim.getObject("/ckpt" + str(i)) for i in range(2)]
+
         # Car parameters
         self.max_velocity = 40
         self.max_steer_angle = 0.52  # 30 degrees
@@ -55,26 +57,36 @@ class Simulator:
         """
         self.sim.stopSimulation()
 
-    def move_car(self, velocity: float, steering: float) -> None:
+    def set_car_velocity(self, velocity: float) -> None:
         """
-        Send a command to the car
+        Send a velocity command to the car
+        Note: the command is only sent if the velocity value changes for the previous value sent
 
         Parameters
         ----------
         velocity : float
             Velocity of the car in m/s
+        """
+        if velocity > self.max_velocity:
+            velocity = self.max_velocity
+        if velocity != self.motor_velocity:
+            self.motor_velocity = velocity
+            self.sim.setJointTargetVelocity(self.motor_handle, self.motor_velocity)
+
+    def set_car_steering(self, steering: float) -> None:
+        """
+        Send a steering command to the car
+        Note: the command is only sent if the steering value changes for the previous value sent
+
+        Parameters
+        ----------
         steering : float
             Steering angle of the car in radians
         """
         steering = np.clip(steering, -self.max_steer_angle, self.max_steer_angle)
-        self.steer_angle = steering
-
-        self.motor_velocity = velocity
-        if self.motor_velocity > self.max_velocity:
-            self.motor_velocity = self.max_velocity
-
-        self.sim.setJointTargetPosition(self.steer_handle, steering)
-        self.sim.setJointTargetVelocity(self.motor_handle, self.motor_velocity)
+        if steering != self.steer_angle:
+            self.steer_angle = steering
+            self.sim.setJointTargetPosition(self.steer_handle, steering)
 
     def stop_car(self) -> None:
         """
@@ -100,7 +112,7 @@ class Simulator:
         # This is necessary to handle compatibility issues between different versions of libraries,
         # which may produce images in different data types.
         if isinstance(image, str):
-            image = bytes(image, 'ascii')
+            image = bytes(image, "ascii")
         image = np.frombuffer(image, dtype=np.uint8)
         image = image.reshape((self.camera_resolution[1], self.camera_resolution[0], 3))
         image = np.flip(
@@ -130,22 +142,6 @@ class Simulator:
         rear_wheel_velocity = (bl_wheel_velocity + br_wheel_velocity) / 2
         linear_velocity = rear_wheel_velocity * 0.09
         return current_steering, linear_velocity
-
-    def is_collision(self, checkpoint_id: int):
-        """
-        Detects the collision of the vehicle with a specified checkpoint in the track
-        Parameters
-        ----------
-        checkpoint_id : int
-            Id of the checkpoint to detect collision with
-        Returns
-        -------
-        boolean
-            whether collision occurs or not
-        """
-        ckpt_handle = self.sim.getObject("/ckpt" + str(checkpoint_id))
-        is_collide, _ = self.sim.checkCollision(self.car_handle, ckpt_handle)
-        return True if is_collide else False
 
     def reset_car_pose(self, position: List[float], orientation: List[float]):
         """
