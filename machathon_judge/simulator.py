@@ -33,7 +33,7 @@ class Simulator:
 
         # Car parameters
         self.max_velocity = 40
-        self.max_steer_angle = 0.52  # 30 degrees
+        self.max_steer_angle = 0.5236  # 30 degrees
         self.motor_torque = 60
 
         self.steer_angle = 0
