@@ -26,7 +26,7 @@ Clone the repositry with the following command <br>
 Navigate to the repositry directory <br> ```cd Machathon4.0-judge```
 
 Install all dependencies needed <br>
-``` pip install -r .\requirements.txt```
+```pip install -r .\requirements.txt```
 
 
 ## Project Hierarchy
