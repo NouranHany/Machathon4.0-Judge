@@ -97,6 +97,7 @@ class WebSocketManager:
         self.thread = threading.Thread(
             target=self.run_async_in_thread, args=(new_loop, callback)
         )
+        self.thread.daemon = True
         self.thread.start()
 
     def close(self) -> None:
