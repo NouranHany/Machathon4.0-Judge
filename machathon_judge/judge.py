@@ -139,6 +139,8 @@ class Judge:
         """
         simulator = Simulator()
 
+        simulator.stop()
+        time.sleep(0.5)  # Ensure the simulator has stopped
         simulator.start()
 
         # Randomly choosing which direction of the track to start the navigation with
@@ -158,7 +160,9 @@ class Judge:
         )
 
         # position the car at the start of the track
-        # simulator.reset_car_pose(self.track_starting_position, self.track_starting_orientation)
+        simulator.reset_car_pose(
+            self.track_starting_position, self.track_starting_orientation
+        )
 
         # execute the competitor's code on the track first direction
         lap_time1 = self.run_track(simulator)
@@ -173,7 +177,9 @@ class Judge:
             if track_id == self.data.FORWARD_TRACK
             else self.data.FTRACK_STARTING_POSITION
         )
-        # simulator.reset_car_pose(self.track_starting_position, self.track_starting_orientation)
+        simulator.reset_car_pose(
+            self.track_starting_position, self.track_starting_orientation
+        )
 
         # execute the competitor's code on the track's opposite direction
         lap_time2 = self.run_track(simulator)
