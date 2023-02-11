@@ -5,6 +5,9 @@
     <img src="https://img.shields.io/badge/Code-Python-blue?logo=python" alt="Website" />
   </a>
   <a style="text-decoration:none" >
+    <img src="https://img.shields.io/badge/Track Design-Blender-orange?logo=Blender" alt="Website" />
+  </a>
+  <a style="text-decoration:none" >
     <img src="https://img.shields.io/badge/Simulator-CoppeliaSim-red" alt="Website" />
   </a>
 </p>
