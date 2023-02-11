@@ -156,9 +156,9 @@ class Judge:
         """
         self.simulator = Simulator()
 
-        simulator.stop()
+        self.simulator.stop()
         time.sleep(0.5)  # Ensure the simulator has stopped
-        simulator.start()
+        self.simulator.start()
 
         # Randomly choosing which direction of the track to start the navigation with
         # Your code should run autonomously given any track
@@ -177,7 +177,7 @@ class Judge:
         )
 
         # position the car at the start of the track
-        simulator.reset_car_pose(
+        self.simulator.reset_car_pose(
             self.track_starting_position, self.track_starting_orientation
         )
 
@@ -194,7 +194,7 @@ class Judge:
             if track_id == self.data.FORWARD_TRACK
             else self.data.FTRACK_STARTING_POSITION
         )
-        simulator.reset_car_pose(
+        self.simulator.reset_car_pose(
             self.track_starting_position, self.track_starting_orientation
         )
 
