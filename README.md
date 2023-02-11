@@ -30,6 +30,25 @@ Navigate to the repositry directory <br> ```cd Machathon4.0-judge```
 Install all dependencies needed <br>
 ```pip install -r .\requirements.txt```
 
+## How to use the judge
+The test.py given demonstrates how to use the judge class
+
+Create an object of the judge class
+Pass your team information; your team name, team code, paths to file code <br>
+```python
+judge = Judge(team_name="TeamX", team_code=12345, code_file_paths=['test.py'])
+```
+
+Pass the function where you have written your main solution to the judge as following
+for example this command assumes you have put your main solution inside a function called run_car <br>
+```python
+judge.set_run_hook(run_car)
+```
+
+Run the judge, which in turn will call the competitor's code twice. It then caluclates the laptime taken for each run and, if specified, publishes the laptime to the leaderboard. To publish the laptime to the leaderboard and record a submission set the send_score parameter as true <br>
+```python
+judge.run(send_score=True)
+```
 
 ## Project Hierarchy
 ```
