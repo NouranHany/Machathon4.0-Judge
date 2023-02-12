@@ -1,11 +1,33 @@
 """
 Example code using the judge module
 """
+import time
+
 # pylint: disable=import-error
 import cv2
 import keyboard
 
 from machathon_judge import Simulator, Judge
+
+
+class FPSCounter:
+    def __init__(self):
+        self.frames = []
+
+    def step(self):
+        self.frames.append(time.monotonic())
+
+    def get_fps(self):
+        n_seconds = 5
+
+        count = 0
+        cur_time = time.monotonic()
+        for f in self.frames:
+            if cur_time - f < n_seconds:  # Count frames in the past n_seconds
+                count += 1
+
+        return count / n_seconds
+
 
 def run_car(simulator: Simulator) -> None:
     """
@@ -21,9 +43,24 @@ def run_car(simulator: Simulator) -> None:
         - set_car_velocity()
         - get_state()
     """
+    fps_counter.step()
+
     # Get the image and show it
     img = simulator.get_image()
     img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+    fps = fps_counter.get_fps()
+
+    # draw fps on image
+    cv2.putText(
+        img,
+        f"FPS: {fps:.2f}",
+        (10, 30),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        1,
+        (0, 255, 0),
+        2,
+        cv2.LINE_AA,
+    )
     cv2.imshow("image", img)
     cv2.waitKey(1)
 
@@ -47,10 +84,11 @@ def run_car(simulator: Simulator) -> None:
 if __name__ == "__main__":
     # Initialize any variables needed
     cv2.namedWindow("image", cv2.WINDOW_NORMAL)
+    fps_counter = FPSCounter()
 
     # You should modify the value of the parameters to the judge constructor
     # according to your team's info
-    judge = Judge(team_name="TeamX", team_code=12345, code_file_paths=['test.py'])
+    judge = Judge(team_name="TeamX", team_code=12345, code_file_paths=["test.py"])
 
     # Pass your main solution function to the judge
     judge.set_run_hook(run_car)
