@@ -54,6 +54,9 @@ judge.run(send_score=True)
 ```
 The provided `test.py` file demonstrates how to use the Judge class. Note: don't submit your solution using this script as it uses the keyboard to manually control the car which is against the rules.
 
+### Note for Ubuntu users
+The test.py script uses the keyboard library which requires running "sudo", so replace "pip3" with "sudo pip3" and "python3" with "sudo python3". This is only needed for the test.py
+
 ## Project Hierarchy
 ```
 └── Machathon4.0-Judge/
