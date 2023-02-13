@@ -100,7 +100,7 @@ class Judge:
             if response.status_code == 200:
                 print("Your score has been published on the leaderboard successfully!")
             else:
-                print('Submission Failure, ', response.text)
+                print("Submission Failure, ", response.text)
 
     def run_track(self, simulator: Simulator) -> float:
         """
@@ -132,16 +132,17 @@ class Judge:
                     start_time = time.monotonic()
                 elif next_ckpt_id == 0:
                     finish_time = time.monotonic()
-                    break
+                    self.collision_manager.close()
+
+                    # return the time taken to complete 1 lap through the track
+                    return finish_time - start_time
                 # switch between the starting checkpoint and the middle-track checkpoint
                 next_ckpt_id = 1 - next_ckpt_id
             # Calling the competitior's code
             self.hook(simulator)
 
-        self.collision_manager.close()
-
-        # return the time taken to complete 1 lap through the track
-        return finish_time - start_time
+        self.clean_up()
+        raise TimeoutError("Simulation timeout exceeded!")
 
     def run_unsafe(self, send_score: bool = True, verbose: bool = True) -> None:
         """
@@ -241,8 +242,12 @@ class Judge:
         try:
             self.run_unsafe(send_score, verbose)
         except KeyboardInterrupt:
-            print("The program has received a keyboard interrupt. Shutting down safely....")
+            print(
+                "The program has received a keyboard interrupt. Shutting down safely...."
+            )
             self.clean_up()
         except ConnectionError:
-            print("Something went wrong! \nYour score hasn't been submitted, please check your internet connection.")
+            print(
+                "Something went wrong! \nYour score hasn't been submitted, please check your internet connection."
+            )
             self.clean_up()
