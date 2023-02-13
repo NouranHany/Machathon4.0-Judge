@@ -22,32 +22,32 @@ The Machathon4.0 Judge repository provides all the required tools and utilities 
 For more information about the competition regulations, please refer to the official competition [rule book](https://drive.google.com/file/d/1JKBMJ_I2fTLatGPrYZn4ctDdNagjJoSc/view?usp=sharing).
 ## Installation
 
-Clone the repositry with the following command <br>
+1. Clone the repositry <br>
 ```git clone https://github.com/NouranHany/Machathon4.0-Judge.git```
 
-Navigate to the repositry directory <br> ```cd Machathon4.0-judge```
+2. Navigate to the repositry directory <br> ```cd Machathon4.0-judge```
 
-Install all dependencies needed <br>
+3. Install all dependencies needed <br>
 ```pip install -r .\requirements.txt```
 
-## How to use the judge
-The test.py given demonstrates how to use the judge class
+## How to Use the Judge?
 
-Create an object of the judge class, pass to it your team information; your team name, team code, paths to file code <br>
+1. Create an instance of the Judge class and provide your team information, including the team name, team code, and the paths to your code files. <br>
 ```python
 judge = Judge(team_name="TeamX", team_code=12345, code_file_paths=['test.py'])
 ```
 
-Pass the function where you have written your main solution to the judge as following
-for example this command assumes you have put your main solution inside a function called run_car <br>
+2. Pass the function where you have written your main solution to the judge. For example, if your solution is in a function named run_car, use the following code: <br>
 ```python
 judge.set_run_hook(run_car)
 ```
 
-Run the judge, which in turn will call the competitor's code twice. It then caluclates the laptime taken for each run and, if specified, publishes the laptime to the leaderboard. To publish the laptime to the leaderboard and record a submission set the send_score parameter as true <br>
+3. Call the judge to run your code. The judge will call your code twice and calculate the lap time for each run. If you choose to publish the lap time to the leaderboard, set the `send_score` parameter to `True`. <br>
 ```python
 judge.run(send_score=True)
 ```
+
+The provided `test.py` file demonstrates how to use the Judge class.
 
 ## Project Hierarchy
 ```
