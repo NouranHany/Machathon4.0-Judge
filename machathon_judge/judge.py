@@ -20,19 +20,16 @@ class Judge:
 
     Parameters
     ----------
-    team_name: string
-        Compeitior team name
-    team_code: int
-        The 7-digit team code
-    code_file_paths: List
-        List of the paths to the code files that represent your solution. e.g. ['test.py']
+    team_code: string
+        The new 9-digit team code
+    zip_file_path: string
+        Path to a zip file containing all your code files that represent your solution. e.g. "mysolution.zip"
     """
 
-    def __init__(self, team_name: str, team_code: int, code_file_paths: List):
+    def __init__(self, team_code: str, zip_file_path: str):
         self.data = Data()
-        self.team_name = team_name
         self.team_code = team_code
-        self.code_file_paths = code_file_paths
+        self.zip_file_path = zip_file_path
         self.track_starting_position = None
         self.track_starting_orientation = None
         self.simulator = None
@@ -76,14 +73,10 @@ class Judge:
             Flag to print messages about the submission status.
         """
 
-        files = [
-            ("solution_code", open(file_path, "rb"))
-            for file_path in self.code_file_paths
-        ]
+        file = [("solution_code", open(self.zip_file_path, "rb"))]
 
         data = {
-            "team_7digit_code": self.team_code,
-            "team_name": self.team_name,
+            "team_9digit_code": self.team_code,
             "forward_laptime": forward_laptime,
             "backward_laptime": backward_laptime,
         }
@@ -93,14 +86,13 @@ class Judge:
                             rv:55.0) Gecko/20100101 Firefox/55.0"
         }
 
-
         # sending post request to STP's leaderboard
         response = requests.post(
             url=self.data.LEADERBOARD_ENDPOINT,
-            files=files,
+            files=file,
             data=data,
             headers=headers,
-            timeout=10,
+            timeout=1000,
         )
 
         # extracting response status code
@@ -226,7 +218,7 @@ class Judge:
                 "Time taken to finish the track starting from its backward orientation: ",
                 backward_laptime,
             )
-
+        
         if send_score:
             self.publish_score(forward_laptime, backward_laptime, verbose)
 

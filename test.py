@@ -88,7 +88,7 @@ if __name__ == "__main__":
 
     # You should modify the value of the parameters to the judge constructor
     # according to your team's info
-    judge = Judge(team_name="your team name", team_code=9999999, code_file_paths=["test.py"])
+    judge = Judge(team_code="your_new_team_code", zip_file_path="your_solution.zip")
 
     # Pass the function that contains your main solution to the judge
     judge.set_run_hook(run_car)
