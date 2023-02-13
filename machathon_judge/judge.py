@@ -96,10 +96,7 @@ class Judge:
             if response.status_code == 200:
                 print("Your score has been published on the leaderboard successfully!")
             else:
-                print(
-                    "Something went wrong while sending your score... \n\
-                        Please check your internet connection or contact the technical organizers."
-                )
+                print('Submission Failure, ', response.text)
 
     def run_track(self, simulator: Simulator) -> float:
         """
