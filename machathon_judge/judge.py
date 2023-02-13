@@ -8,6 +8,7 @@ from typing import Callable, List
 
 # pylint: disable=import-error
 import requests
+from requests.exceptions import ConnectionError
 from .data import Data
 from .simulator import Simulator
 from .collision_manager import CollisionManager
@@ -49,6 +50,16 @@ class Judge:
         """
         self.hook = hook_func
 
+    def clean_up(self) -> None:
+        """
+        Closes the simulator and collision manager object.
+        """
+        if self.collision_manager is not None:
+            self.collision_manager.close()
+
+        if self.simulator is not None:
+            self.simulator.stop()
+
     def publish_score(
         self, forward_laptime: float, backward_laptime: float, verbose: bool = True
     ) -> None:
@@ -81,6 +92,7 @@ class Judge:
             "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.12; \
                             rv:55.0) Gecko/20100101 Firefox/55.0"
         }
+
 
         # sending post request to STP's leaderboard
         response = requests.post(
@@ -238,9 +250,7 @@ class Judge:
             self.run_unsafe(send_score, verbose)
         except KeyboardInterrupt:
             print("The program has received a keyboard interrupt. Shutting down safely....")
-
-            if self.collision_manager is not None:
-                self.collision_manager.close()
-
-            if self.simulator is not None:
-                self.simulator.stop()
+            self.clean_up()
+        except ConnectionError:
+            print("Something went wrong! \nYour score hasn't been submitted, please check your internet connection.")
+            self.clean_up()

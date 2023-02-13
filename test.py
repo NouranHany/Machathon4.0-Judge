@@ -90,8 +90,8 @@ if __name__ == "__main__":
     # according to your team's info
     judge = Judge(team_name="your team name", team_code=9999999, code_file_paths=["test.py"])
 
-    # Pass your main solution function to the judge
+    # Pass the function that contains your main solution to the judge
     judge.set_run_hook(run_car)
 
     # Start the judge and simulation
-    judge.run(send_score=True)
+    judge.run(send_score=True, verbose=True)
