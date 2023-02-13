@@ -25,16 +25,16 @@ For more information about the competition regulations, please refer to the Offi
 1. Clone the repositry <br>
 ```git clone https://github.com/NouranHany/Machathon4.0-Judge.git```
 
-2. Navigate to the repositry directory <br> ```cd Machathon4.0-judge```
+2. Navigate to the repository directory <br> ```cd Machathon4.0-judge```
 
 3. Install all dependencies needed <br>
 ```pip install -r .\requirements.txt```
 
 ## How to Use the Judge?
 
-1. Create an instance of the Judge class and provide your team information, including the team name, team code, and the paths to your code files. <br>
+1. Create an instance of the Judge class and provide your team information, including the team name, team code, and the path to a zip containing your code. <br>
 ```python
-judge = Judge(team_name="TeamX", team_code=12345, code_file_paths=['test.py'])
+judge = Judge(team_name="TeamX", team_code=12345, code_file_paths=['your_solution.zip'])
 ```
 
 2. Pass the function where you have written your main solution to the judge. For example, if your solution is in a function named run_car, use the following code: <br>
@@ -46,7 +46,7 @@ judge.set_run_hook(run_car)
 ```python
 judge.run(send_score=True)
 ```
-The provided `test.py` file demonstrates how to use the Judge class.
+The provided `test.py` file demonstrates how to use the Judge class. Note: don't submit your solution using this script as it uses the keyboard to manually control the car which is against the rules.
 
 ## Preparation for running the code
 Before running your code, it's important to make sure you have opened the `filteration_scene.ttt` in CoppeliaSim. Here are the steps to follow:
