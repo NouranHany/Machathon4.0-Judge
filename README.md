@@ -19,7 +19,7 @@
 
 The Machathon4.0 Judge repository provides all the required tools and utilities for the [Machathon4.0 Competition - self driving cars edition](https://www.facebook.com/events/1344518816336469). It features convenient wrapper functions for controlling the movement of the car and capturing images from the camera within the CoppeliaSim simulator. It also includes the judge code that evaluates the competitor's solution and updates the leader-board. 
 
-For more information about the competition regulations, please refer to the official competition [rule book](https://drive.google.com/file/d/1JKBMJ_I2fTLatGPrYZn4ctDdNagjJoSc/view?usp=sharing).
+For more information about the competition regulations, please refer to the official competition [rule book](https://drive.google.com/drive/folders/1f5tKFI4mWJoQy0Vv3YQ2X8SHJh2JxGTu?usp=sharing).
 ## Installation
 
 1. Clone the repositry <br>
