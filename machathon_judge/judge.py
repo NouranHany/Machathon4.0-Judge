@@ -148,6 +148,7 @@ class Judge:
             # Calling the competitior's code
             self.hook(simulator)
 
+        self.clean_up()
         raise TimeoutError("Simulation timeout exceeded!")
 
     def run_unsafe(self, send_score: bool = True, verbose: bool = True) -> None:
