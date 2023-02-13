@@ -28,7 +28,7 @@ For more information about the competition regulations, please refer to the Offi
 2. Navigate to the repository directory <br> ```cd Machathon4.0-Judge```
 
 3. Install all dependencies needed <br>
-```pip install -r .\requirements.txt```
+```pip install -r requirements.txt```
 
 ## How to Use the Judge?
 
