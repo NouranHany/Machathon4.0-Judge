@@ -46,15 +46,21 @@ judge.set_run_hook(run_car)
 ```python
 judge.run(send_score=True)
 ```
-
 The provided `test.py` file demonstrates how to use the Judge class.
+
+## Preparation for running the code
+Before running your code, it's important to make sure you have opened the `filteration_scene.ttt` in CoppeliaSim. Here are the steps to follow:
+
+1. Open CoppeliaSim.
+2. Load the `filteration_scene.ttt` file by going to File > Open Scene > Browse, then navigating to the location where the scene file is stored.
 
 ## Project Hierarchy
 ```
 └── Machathon4.0-Judge/
     ├── machathon_judge/
     │   ├── data.py  # contains important variables that are used throughout the project
-    │   ├── judge.py 
+    │   ├── judge.py # Module containing the Judge class to run the competition's tracks and publish the scores to the leaderboard
+    |   ├── collision_manager.py # Module containing the CollisionManager class to manage the collision events
     │   ├── simulator.py  # Wrapper for the API that connects CoppeliaSim and Python
     │   └── filteration_scene.ttt  # The competition environment in CoppeliaSim, which includes the track and the vehicle
     ├── test.py  # Demonstrates how to utilize the competition judge and simulator classes
