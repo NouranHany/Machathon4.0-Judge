@@ -25,7 +25,7 @@ For more information about the competition regulations, please refer to the Offi
 1. Clone the repositry <br>
 ```git clone https://github.com/NouranHany/Machathon4.0-Judge.git```
 
-2. Navigate to the repository directory <br> ```cd Machathon4.0-judge```
+2. Navigate to the repository directory <br> ```cd Machathon4.0-Judge```
 
 3. Install all dependencies needed <br>
 ```pip install -r .\requirements.txt```
