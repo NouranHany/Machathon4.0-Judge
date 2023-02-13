@@ -94,4 +94,4 @@ if __name__ == "__main__":
     judge.set_run_hook(run_car)
 
     # Start the judge and simulation
-    judge.run(send_score=True, verbose=True)
+    judge.run(send_score=False, verbose=True)
