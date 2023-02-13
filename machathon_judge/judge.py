@@ -234,10 +234,13 @@ class Judge:
         verbose: bool, optional
             Flag to print messages about the lap time values, default is True.
         """
+        # The following try-except block handles any keyboard interruptions
+        # that occur during the run, such as pressing "ctrl+c" in the terminal.
+        # It closes any opened collision manager and simulator objects.
         try:
             self.run_unsafe(send_score, verbose)
         except KeyboardInterrupt:
-            print("Interrupted")
+            print("The program has received a keyboard interrupt. Shutting down safely....")
 
             if self.collision_manager is not None:
                 self.collision_manager.close()
