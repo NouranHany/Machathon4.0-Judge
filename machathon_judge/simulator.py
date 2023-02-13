@@ -32,6 +32,7 @@ class Simulator:
         self.checkpoints = [self.sim.getObject("/ckpt" + str(i)) for i in range(2)]
 
         # Car parameters
+        self.wheel_radius = 0.09
         self.max_velocity = 40
         self.max_steer_angle = 0.5236  # 30 degrees
         self.motor_torque = 60
@@ -69,8 +70,9 @@ class Simulator:
         """
         if velocity > self.max_velocity:
             velocity = self.max_velocity
-        if velocity != self.motor_velocity:
-            self.motor_velocity = velocity
+        motor_velocity = velocity / self.wheel_radius
+        if motor_velocity != self.motor_velocity:
+            self.motor_velocity = motor_velocity
             self.sim.setJointTargetVelocity(self.motor_handle, self.motor_velocity)
 
     def set_car_steering(self, steering: float) -> None:
@@ -128,7 +130,7 @@ class Simulator:
             self.wheel_handles[0], self.sim.jointfloatparam_velocity
         )
         rear_wheel_velocity = (bl_wheel_velocity + br_wheel_velocity) / 2
-        linear_velocity = rear_wheel_velocity * 0.09
+        linear_velocity = rear_wheel_velocity * self.wheel_radius
         return current_steering, linear_velocity
 
     def reset_car_pose(self, position: List[float], orientation: List[float]):
