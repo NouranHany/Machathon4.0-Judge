@@ -30,6 +30,12 @@ For more information about the competition regulations, please refer to the Offi
 3. Install all dependencies needed <br>
 ```pip install -r requirements.txt```
 
+## Preparation for running the code
+Before running your code, it's important to make sure you have opened the `filteration_scene.ttt` in CoppeliaSim. Here are the steps to follow:
+
+1. Open CoppeliaSim.
+2. Load the `filteration_scene.ttt` file by going to File > Open Scene > Browse, then navigating to the location where the scene file is stored.
+
 ## How to Use the Judge?
 
 1. Create an instance of the Judge class and provide your team information, including the team name, team code, and the path to a zip containing your code. <br>
@@ -47,12 +53,6 @@ judge.set_run_hook(run_car)
 judge.run(send_score=True)
 ```
 The provided `test.py` file demonstrates how to use the Judge class. Note: don't submit your solution using this script as it uses the keyboard to manually control the car which is against the rules.
-
-## Preparation for running the code
-Before running your code, it's important to make sure you have opened the `filteration_scene.ttt` in CoppeliaSim. Here are the steps to follow:
-
-1. Open CoppeliaSim.
-2. Load the `filteration_scene.ttt` file by going to File > Open Scene > Browse, then navigating to the location where the scene file is stored.
 
 ## Project Hierarchy
 ```
