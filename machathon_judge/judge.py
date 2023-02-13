@@ -161,6 +161,7 @@ class Judge:
         self.simulator.stop()
         time.sleep(0.5)  # Ensure the simulator has stopped
         self.simulator.start()
+        time.sleep(2)  # Ensure the websockets have started
 
         # Randomly choosing which direction of the track to start the navigation with
         # Your code should run autonomously given any track
@@ -219,7 +220,7 @@ class Judge:
                 "Time taken to finish the track starting from its backward orientation: ",
                 backward_laptime,
             )
-        
+
         if send_score:
             self.publish_score(forward_laptime, backward_laptime, verbose)
 
