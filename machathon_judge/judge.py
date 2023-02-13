@@ -45,7 +45,7 @@ class Judge:
         ----------
         hook_func: Callable
             A function to be called each time step of the simulation
-            This is the function provided by the competitors to control the vehicle
+            This is the function provided by the competitors that represents their solution.
         """
         self.hook = hook_func
 
