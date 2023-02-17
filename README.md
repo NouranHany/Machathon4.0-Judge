@@ -38,9 +38,9 @@ Before running your code, it's important to make sure you have opened the `filte
 
 ## How to Use the Judge?
 
-1. Create an instance of the Judge class and provide your team information, including the team name, team code, and the path to a zip containing your code. <br>
+1. Create an instance of the Judge class and provide your team information, including the team code(consists of 9 digits), and the path to a zip containing your code. <br>
 ```python
-judge = Judge(team_name="TeamX", team_code="9digit_team_code", code_file_paths=['your_solution.zip'])
+judge = Judge(team_code="your_new_team_code", zip_file_path="your_solution.zip")
 ```
 
 2. Pass the function where you have written your main solution to the judge. For example, if your solution is in a function named run_car, use the following code: <br>
