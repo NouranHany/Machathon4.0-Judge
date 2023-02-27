@@ -24,6 +24,12 @@ The Machathon4.0 Judge repository provides all the required tools and utilities 
 📜 For more information about the competition regulations, please refer to the Official Competition [Rules Book](https://drive.google.com/drive/folders/1f5tKFI4mWJoQy0Vv3YQ2X8SHJh2JxGTu?usp=sharing).
 ## Installation
 
+You can install the machathon judge library using pip through the following command:
+```python 
+pip install machathon-judge
+```
+Or you can install it manually using the following steps:
+
 1. Clone the repositry <br>
 ```git clone https://github.com/NouranHany/Machathon4.0-Judge.git```
 
