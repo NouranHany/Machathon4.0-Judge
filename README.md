@@ -72,8 +72,8 @@ The test.py script uses the keyboard library which requires running "sudo", so r
     │   ├── data.py  # contains important variables that are used throughout the project
     │   ├── judge.py # Module containing the Judge class to run the competition's tracks and publish the scores to the leaderboard
     |   ├── collision_manager.py # Module containing the CollisionManager class to manage the collision events
-    │   ├── simulator.py  # Wrapper for the API that connects CoppeliaSim and Python
-    │   └── filteration_scene.ttt  # The competition environment in CoppeliaSim, which includes the track and the vehicle
+    │   └── simulator.py  # Wrapper for the API that connects CoppeliaSim and Python
+    ├── filteration_scene.ttt  # The competition environment in CoppeliaSim, which includes the track and the vehicle   
     ├── test.py  # Demonstrates how to utilize the competition judge and simulator classes
     └── requirements.txt
 ```
